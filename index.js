@@ -4,19 +4,19 @@ console.log(JSON.parse(require("fs").readFileSync("data.json")).join(" ")); // t
 
 function getRecentNodeVersion(callback) {
     console.log(3);
-    https.get('https://nodejs.org/dist/index.json', function (response) { /// how do I know when this get done?
-        console.log(0);
+    https.get('https://nodejs.org/dist/index.json', function (response) {
+        console.log(13);
 
         var rawData = '',
             parsedData;
 
         response.setEncoding('utf8');
         //when is this called
-        response.on('data', function (chunk) {
+        response.on('data', function (chunk) { /// gets called whenever there is new data
             rawData += chunk;
         });
-        //when is this called
-        response.on('end', function () {
+        //when is this called  
+        response.on('end', function () { /// gets called when the data is completely loaded
             try {
                 parsedData = JSON.parse(rawData);
             } catch (e) {
@@ -26,21 +26,21 @@ function getRecentNodeVersion(callback) {
             //this is weird for a callback to return a value, just think about it
             var words = callback(null, parsedData[0].version);
             console.log(words);
-            console.log(0);
+            console.log(17);
 
             //where does this string go?
             return "more words things";
         });
 
-        console.log(0);
-        //where does this string go?
+        console.log(14);
+        //where does this string go? /// wherever it got called in the depths of https.get
         return "more words";
 
     }).on('error', function (e) {
         //when would this be executed
         callback(e);
 
-        // if this returned a value where would it go?
+        // if this returned a value where would it go?  /// to the depths of JavaScript
         return "this is in the error"
     });
 
@@ -69,32 +69,32 @@ function start() {
 
     console.log(2)
     text = getRecentNodeVersion(function (err, nodeVersion) { // text = "return"
-        console.log(0);
+        console.log(15);
 
         if (err) {
             console.log(err);
-            // if this returned a value where would it go?
+            // if this returned a value where would it go? /// it would return to line 27
             return;
         }
 
         console.log("Current Node Version:", nodeVersion);
-        console.log(0);
+        console.log(16);
 
-        //this return is also weird, just want you to think about it
+        //this return is also weird, just want you to think about it  /// returns to line 27
         return "this is weird";
     })
 
     console.log(5);
-    number = addNumbers(2, 3, function (err, sum) { // number = 500
+    number = addNumbers(20, 30, function (err, sum) { // number = 500
         if (err) {
             console.log(err);
-            //if this returned a value where would it go?
-            // also, why do we need a return here?
+            //if this returned a value where would it go? /// returns to line 57
+            // also, why do we need a return here?     /// if no return, it continues
             return;
         }
         console.log(7);
         console.log(sum);
-        //this return is also weird, just want you to think about it
+        //this return is also weird, just want you to think about it  /// returns to line 57
         return "not a number";
     });
 
@@ -108,3 +108,9 @@ function start() {
 console.log(1);
 start();
 console.log(12);
+
+
+//          ___   ___   _   _   ___         ____  _____  ____                                              
+//         /   \ /   \ / \ / \ |   \ |     |        |   |      |                              
+//         |     |   | |  |  | |___/ |     |----    |   |----  |                                    
+//         \___/ \___/ |     | |     |____ |____    |   |____  .      
